@@ -22,7 +22,7 @@ const defaultProgress: StudyProgress = {
 
 const STORAGE_KEY = "embedded-study-progress";
 
-export function useProgress(totalTopics = 4) {
+export function useProgress(totalTopics = 3) {
   const [progress, setProgress] = useState<StudyProgress>(defaultProgress);
   const [isLoaded, setIsLoaded] = useState(false);
 

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getContentBySlug, getContentSlugs, getQuizBySlug } from "@/lib/content";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
@@ -90,14 +89,7 @@ export default function StudyPage({ params }: StudyPageProps) {
                   <p className="mb-2 text-sm text-muted-foreground">Category</p>
                   <p className="font-medium capitalize">{content.category}</p>
                 </div>
-                <div className="grid gap-2">
-                  <CompleteTopicButton slug={slug} />
-                  {quizData && (
-                    <Link href="/tests" className="inline-flex h-9 items-center justify-center rounded-md border border-can/40 bg-can/10 px-4 py-2 text-sm font-bold text-can transition-colors hover:bg-can/20">
-                      Open Test Center
-                    </Link>
-                  )}
-                </div>
+                <CompleteTopicButton slug={slug} />
               </div>
             </div>
 

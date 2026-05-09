@@ -21,9 +21,8 @@ Open <http://localhost:3000>.
 ## Features
 
 - Dark embedded-engineer dashboard with global search, status filter, level filter, category cards, and progress stats.
-- Markdown study pages with GitHub-flavored Markdown, highlighted code blocks with copy buttons, responsive tables, Mermaid diagrams, quizzes, checklists, and a mark-complete action.
+- Markdown study pages with GitHub-flavored Markdown, highlighted code blocks, Mermaid diagrams, quizzes, checklists, and a mark-complete action.
 - Local progress persistence via `localStorage`, plus export/import from the Progress and Settings pages.
-- Dedicated `/tests` Test Center that aggregates every `quiz.json` and saves scores automatically.
 - EN/JP-ready UI structure and bilingual content convention.
 - PWA manifest stub for installable behavior and future offline caching.
 
@@ -61,7 +60,7 @@ Optional Japanese version: add `index.ja.md` beside `index.md` for future biling
 
 ## Customize a quiz
 
-Add `quiz.json` next to `index.md`; it appears both on the study page and in `/tests`:
+Add `quiz.json` next to `index.md`:
 
 ```json
 {

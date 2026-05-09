@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, BookOpen, BookOpenCheck, Settings } from "lucide-react";
+import { BarChart3, BookOpen, Settings } from "lucide-react";
 import { Button } from "@/components/ui";
 
 interface SidebarProps {
@@ -97,10 +97,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </nav>
 
           <div className="border-t border-white/10 p-4">
-            <Link href="/tests" className="mb-2 flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 transition-colors hover:bg-white/10" onClick={onClose}>
-              <BookOpenCheck className="h-4 w-4 text-can" />
-              Test Center
-            </Link>
             <Link href="/progress" className="mb-2 flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 transition-colors hover:bg-white/10" onClick={onClose}>
               <BarChart3 className="h-4 w-4 text-rtos" />
               Progress

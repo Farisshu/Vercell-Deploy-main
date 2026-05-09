@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BookOpen, BookOpenCheck, Clock, Filter, Search, Trophy } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, Filter, Search, Trophy } from "lucide-react";
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, Input, ProgressBar } from "@/components/ui";
 import type { ContentFile } from "@/lib/content";
 import { useProgress } from "@/lib/progress";
@@ -32,18 +32,6 @@ export default function DashboardClient({ allContent }: DashboardClientProps) {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [language, setLanguage] = useState<"en" | "jp">("en");
   const { progress, isLoaded, getTopicStatus, markInProgress } = useProgress(allContent.length);
-
-  useEffect(() => {
-    const savedLanguage = window.localStorage.getItem("embedded-study-language");
-    if (savedLanguage === "en" || savedLanguage === "jp") {
-      setLanguage(savedLanguage);
-    }
-  }, []);
-
-  const saveLanguage = (nextLanguage: "en" | "jp") => {
-    setLanguage(nextLanguage);
-    window.localStorage.setItem("embedded-study-language", nextLanguage);
-  };
 
   const completedCount = isLoaded ? progress.completedTopics.length : 0;
   const inProgressCount = isLoaded ? progress.inProgressTopics.length : 0;
@@ -76,21 +64,16 @@ export default function DashboardClient({ allContent }: DashboardClientProps) {
           <div className="relative mb-8 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.35em] text-can">HORIBA Kyoto prep</p>
-              <h1 className="mb-4 max-w-4xl text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              <h1 className="mb-4 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
                 Embedded Study Hub <span className="inline-block">🎯</span>
               </h1>
               <p className="max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
                 Belajar CAN, SPI, FreeRTOS, toolchain, dan Japanese technical vocabulary dengan materi interaktif, quiz, checklist, dan progress lokal.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3 justify-self-start lg:justify-self-end">
-              <Link href="/tests" className="inline-flex items-center gap-2 rounded-full bg-can px-4 py-2 text-sm font-bold text-slate-950 shadow-lg shadow-can/20 transition hover:-translate-y-0.5">
-                <BookOpenCheck className="h-4 w-4" /> Test Center
-              </Link>
-              <div className="rounded-full border border-white/10 bg-black/30 p-1 shadow-inner">
-              <button className={`rounded-full px-4 py-2 text-sm transition ${language === "en" ? "bg-white text-slate-950" : "text-slate-300 hover:text-foreground"}`} onClick={() => saveLanguage("en")}>EN</button>
-              <button className={`rounded-full px-4 py-2 text-sm transition ${language === "jp" ? "bg-white text-slate-950" : "text-slate-300 hover:text-foreground"}`} onClick={() => saveLanguage("jp")}>JP</button>
-              </div>
+            <div className="justify-self-start rounded-full border border-white/10 bg-black/30 p-1 shadow-inner lg:justify-self-end">
+              <button className={`rounded-full px-4 py-2 text-sm transition ${language === "en" ? "bg-white text-slate-950" : "text-slate-300 hover:text-white"}`} onClick={() => setLanguage("en")}>EN</button>
+              <button className={`rounded-full px-4 py-2 text-sm transition ${language === "jp" ? "bg-white text-slate-950" : "text-slate-300 hover:text-white"}`} onClick={() => setLanguage("jp")}>JP</button>
             </div>
           </div>
 
@@ -120,7 +103,7 @@ export default function DashboardClient({ allContent }: DashboardClientProps) {
             <Card className="border-white/10 bg-white/[0.04] shadow-xl">
               <CardContent className="pt-6">
                 <p className="mb-3 text-sm text-muted-foreground">Overall completion</p>
-                <p className="mb-3 text-3xl font-black text-foreground">{overallProgress}%</p>
+                <p className="mb-3 text-3xl font-black text-white">{overallProgress}%</p>
                 <ProgressBar value={overallProgress} className="h-3" />
               </CardContent>
             </Card>
@@ -131,7 +114,7 @@ export default function DashboardClient({ allContent }: DashboardClientProps) {
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h2 className="flex items-center gap-2 text-2xl font-bold"><Filter className="h-5 w-5 text-can" /> Browse by Category</h2>
             {categoryFilter !== "all" && (
-              <button className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline" onClick={() => setCategoryFilter("all")}>Clear category filter</button>
+              <button className="text-sm text-muted-foreground underline-offset-4 hover:text-white hover:underline" onClick={() => setCategoryFilter("all")}>Clear category filter</button>
             )}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -183,7 +166,7 @@ function StatCard({ icon, label, value, className }: { icon: ReactNode; label: s
     <Card className="border-white/10 bg-white/[0.04] shadow-xl">
       <CardContent className="pt-6">
         <div className={className}>{icon}</div>
-        <p className="mt-4 text-3xl font-black text-foreground">{value}</p>
+        <p className="mt-4 text-3xl font-black text-white">{value}</p>
         <p className="text-sm text-muted-foreground">{label}</p>
       </CardContent>
     </Card>
