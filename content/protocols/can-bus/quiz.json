@@ -1,0 +1,59 @@
+{
+  "questions": [
+    {
+      "question": "What is the function of the EFLG register in MCP2515?",
+      "options": [
+        "Enable frame transmission",
+        "Store error flags and status",
+        "Configure baud rate",
+        "Filter incoming messages"
+      ],
+      "correct": 1,
+      "explanation": "EFLG (Error Flag) register contains bits that indicate various error states like warning, passive, bus-off, and overflow conditions."
+    },
+    {
+      "question": "What is the standard termination resistor value for CAN bus?",
+      "options": [
+        "50Ω",
+        "100Ω",
+        "120Ω",
+        "220Ω"
+      ],
+      "correct": 2,
+      "explanation": "CAN bus requires 120Ω termination resistors at each end of the bus to prevent signal reflections."
+    },
+    {
+      "question": "In CAN bus arbitration, which message has higher priority?",
+      "options": [
+        "Higher ID number",
+        "Lower ID number",
+        "Longer data length",
+        "Message sent first"
+      ],
+      "correct": 1,
+      "explanation": "CAN uses dominant-first arbitration. Lower ID numbers have more dominant bits and win arbitration."
+    },
+    {
+      "question": "What happens when a CAN node enters bus-off state?",
+      "options": [
+        "It transmits faster",
+        "It stops participating on the bus",
+        "It switches to low-speed mode",
+        "It becomes the bus master"
+      ],
+      "correct": 1,
+      "explanation": "Bus-off state occurs after excessive errors. The node disconnects from the bus and must be reset to rejoin."
+    },
+    {
+      "question": "For MCP2515 with 16MHz crystal, what gives approximately 500kbps?",
+      "options": [
+        "BRP=1, Total TQ=16",
+        "BRP=2, Total TQ=8",
+        "BRP=4, Total TQ=4",
+        "BRP=8, Total TQ=2"
+      ],
+      "correct": 1,
+      "explanation": "Baud = Fosc/(2×BRP×TotalTQ) = 16MHz/(2×2×8) = 500kbps"
+    }
+  ]
+}
