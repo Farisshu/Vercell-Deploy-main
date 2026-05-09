@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "question": "What is the safest FreeRTOS primitive for sending structured data between two tasks?",
+      "options": ["Queue", "Busy-wait global variable", "delay() loop", "printf()"],
+      "correct": 0,
+      "explanation": "Queues copy data safely between tasks and block/wake tasks without wasting CPU time."
+    },
+    {
+      "question": "Which API return value should you check after xTaskCreate?",
+      "options": ["pdPASS", "CAN_OK", "HAL_BUSY", "EOF"],
+      "correct": 0,
+      "explanation": "xTaskCreate returns pdPASS when the task was created successfully."
+    },
+    {
+      "question": "What should you use to protect shared mutable data from two tasks?",
+      "options": ["Mutex", "Longer task name", "Higher baud rate", "More printf calls"],
+      "correct": 0,
+      "explanation": "A mutex protects a shared critical section and FreeRTOS mutexes support priority inheritance."
+    },
+    {
+      "question": "Which FreeRTOS APIs are intended for ISR context?",
+      "options": ["Functions ending with FromISR", "vTaskDelay", "malloc only", "Serial.print only"],
+      "correct": 0,
+      "explanation": "Use FromISR variants inside interrupts and defer heavier work to tasks."
+    }
+  ]
+}

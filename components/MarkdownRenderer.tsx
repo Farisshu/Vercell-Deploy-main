@@ -54,6 +54,47 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     processMarkdown();
   }, [content]);
 
+
+  useEffect(() => {
+    if (!html || typeof window === "undefined") {
+      return;
+    }
+
+    document.querySelectorAll(".prose table").forEach((table) => {
+      if (table.parentElement?.classList.contains("markdown-table-wrap")) {
+        return;
+      }
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "markdown-table-wrap";
+      table.parentElement?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+
+    document.querySelectorAll(".prose pre").forEach((pre) => {
+      const element = pre as HTMLElement;
+      if (element.dataset.copyReady === "true") {
+        return;
+      }
+
+      element.dataset.copyReady = "true";
+      element.style.position = "relative";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "copy-code-button";
+      button.textContent = "Copy";
+      button.addEventListener("click", async () => {
+        const code = element.querySelector("code")?.textContent ?? "";
+        await navigator.clipboard.writeText(code);
+        button.textContent = "Copied";
+        window.setTimeout(() => {
+          button.textContent = "Copy";
+        }, 1200);
+      });
+      element.appendChild(button);
+    });
+  }, [html]);
+
   useEffect(() => {
     // Render Mermaid diagrams after HTML is set
     if (mermaidCode.length > 0 && typeof window !== "undefined") {

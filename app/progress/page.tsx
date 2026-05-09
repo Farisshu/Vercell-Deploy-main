@@ -7,7 +7,8 @@ import { useProgress } from "@/lib/progress";
 import { Trophy, BookOpen, CheckCircle2, Download, Upload, Trash2 } from "lucide-react";
 
 export default function ProgressPage() {
-  const { progress, isLoaded, exportProgress, importProgress, resetProgress } = useProgress();
+  const totalTopics = 4;
+  const { progress, isLoaded, exportProgress, importProgress, resetProgress, getOverallProgress } = useProgress(totalTopics);
   const [importText, setImportText] = useState("");
 
   const handleExport = () => {
@@ -115,9 +116,9 @@ export default function ProgressPage() {
                 <CardTitle>Overall Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <ProgressBar value={progress.completedTopics.length * 10} max={100} className="h-4" />
+                <ProgressBar value={getOverallProgress()} max={100} className="h-4" />
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {progress.completedTopics.length * 10}% of your learning journey completed
+                  {getOverallProgress()}% completed ({progress.completedTopics.length}/{totalTopics} topics)
                 </p>
               </CardContent>
             </Card>

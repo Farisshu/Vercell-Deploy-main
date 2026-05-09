@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import { Card, CardHeader, CardTitle, CardContent, Button } from "@/components/ui";
 import { useProgress } from "@/lib/progress";
@@ -11,6 +11,23 @@ export default function SettingsPage() {
   const [language, setLanguage] = useState<"en" | "jp">("en");
   const [importText, setImportText] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    const savedLanguage = window.localStorage.getItem("embedded-study-language");
+    if (savedLanguage === "jp" || savedLanguage === "en") {
+      setLanguage(savedLanguage);
+    }
+
+    const savedTheme = window.localStorage.getItem("embedded-study-theme");
+    const lightMode = savedTheme === "light";
+    document.documentElement.classList.toggle("light", lightMode);
+    setIsDarkMode(!lightMode);
+  }, []);
+
+  const saveLanguage = (nextLanguage: "en" | "jp") => {
+    setLanguage(nextLanguage);
+    window.localStorage.setItem("embedded-study-language", nextLanguage);
+  };
 
   const handleExport = () => {
     const data = exportProgress();
@@ -43,10 +60,10 @@ export default function SettingsPage() {
   };
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    if (typeof window !== "undefined") {
-      document.documentElement.classList.toggle("light");
-    }
+    const nextDarkMode = !isDarkMode;
+    setIsDarkMode(nextDarkMode);
+    document.documentElement.classList.toggle("light", !nextDarkMode);
+    window.localStorage.setItem("embedded-study-theme", nextDarkMode ? "dark" : "light");
   };
 
   return (
@@ -71,13 +88,13 @@ export default function SettingsPage() {
               <div className="flex gap-2">
                 <Button
                   variant={language === "en" ? "default" : "outline"}
-                  onClick={() => setLanguage("en")}
+                  onClick={() => saveLanguage("en")}
                 >
                   English
                 </Button>
                 <Button
                   variant={language === "jp" ? "default" : "outline"}
-                  onClick={() => setLanguage("jp")}
+                  onClick={() => saveLanguage("jp")}
                 >
                   日本語
                 </Button>

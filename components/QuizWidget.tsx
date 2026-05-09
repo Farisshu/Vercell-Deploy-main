@@ -72,7 +72,7 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
     const percentage = Math.round((score / questions.length) * 100);
     
     return (
-      <div className="rounded-lg border bg-card p-6 text-center">
+      <div className="rounded-2xl border border-white/10 bg-card/80 p-6 text-center shadow-xl">
         <h3 className="mb-4 text-2xl font-bold">Quiz Completed! 🎉</h3>
         <div className="mb-4 text-4xl">
           {percentage >= 80 ? "🏆" : percentage >= 60 ? "👍" : "📚"}
@@ -97,7 +97,7 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
   const question = questions[currentQuestion];
 
   return (
-    <div className="rounded-lg border bg-card p-6">
+    <div className="rounded-2xl border border-white/10 bg-card/80 p-6 shadow-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold">
           Quiz: Question {currentQuestion + 1}/{questions.length}
@@ -111,7 +111,7 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
 
       <div className="mb-6 space-y-3">
         {question.options.map((option, index) => {
-          let buttonStyle = "w-full justify-start text-left";
+          let buttonStyle = "h-auto min-h-11 w-full justify-start whitespace-normal py-3 text-left leading-6";
           
           if (answered) {
             if (index === question.correct) {
@@ -147,7 +147,7 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
       </div>
 
       {answered && (
-        <div className="mb-6 rounded-md bg-secondary p-4">
+        <div className="mb-6 rounded-xl border border-white/10 bg-secondary p-4">
           <p className="font-semibold">
             {selectedAnswer === question.correct ? "✅ Correct!" : "❌ Incorrect"}
           </p>

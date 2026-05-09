@@ -67,6 +67,10 @@ export function useProgress(totalTopics = 3) {
       }
     }
 
+    if (newProgress.completedTopics.length >= totalTopics && !newProgress.badges.includes("Dedicated Learner")) {
+      newProgress.badges = [...newProgress.badges, "Dedicated Learner"];
+    }
+
     saveProgress(newProgress);
   };
 
@@ -82,9 +86,14 @@ export function useProgress(totalTopics = 3) {
   };
 
   const saveQuizScore = (slug: string, score: number) => {
+    const badges = score >= 100 && !progress.badges.includes("Quiz Master")
+      ? [...progress.badges, "Quiz Master"]
+      : progress.badges;
     const newProgress = {
       ...progress,
+      badges,
       quizScores: { ...progress.quizScores, [slug]: Math.max(score, progress.quizScores[slug] || 0) },
+      lastStudied: { ...progress.lastStudied, [slug]: new Date().toISOString() },
     };
     saveProgress(newProgress);
   };
