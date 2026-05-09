@@ -7,6 +7,7 @@ import remarkRehype from "remark-rehype";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
+// @ts-ignore - unist-util-visit doesn't have proper types for ESM
 import { visit } from "unist-util-visit";
 
 interface MarkdownRendererProps {

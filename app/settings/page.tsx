@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Header from "@/components/Header";
-import { Card, CardHeader, CardTitle, CardContent, Button, Input } from "@/components/ui";
+import { Card, CardHeader, CardTitle, CardContent, Button } from "@/components/ui";
 import { useProgress } from "@/lib/progress";
 import { Globe, Download, Upload, Trash2, Moon, Sun } from "lucide-react";
 
@@ -36,7 +36,7 @@ export default function SettingsPage() {
   };
 
   const handleReset = () => {
-    if (confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
+    if (typeof window !== "undefined" && confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
       resetProgress();
       alert("Progress has been reset.");
     }

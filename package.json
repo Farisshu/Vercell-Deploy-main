@@ -2,6 +2,7 @@
   "name": "embedded-study-hub",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -26,7 +27,8 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.3.0",
     "mermaid": "^10.9.0",
-    "recharts": "^2.12.7"
+    "recharts": "^2.12.7",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",

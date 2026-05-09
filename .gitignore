@@ -1,28 +1,22 @@
-```
-# Build artifacts
-dist/
-build/
-*.min.js
-*.min.css
-*.bundle.js
-
+```gitignore
 # Dependencies
 node_modules/
 
-# Logs and temp files
-*.log
-*.tmp
+# Build outputs
+dist/
+build/
+.next/
+out/
 
-# Environment
+# Environment variables
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
+# Logs
+*.log
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Coverage
+coverage/
+.nyc_output/
 ```
