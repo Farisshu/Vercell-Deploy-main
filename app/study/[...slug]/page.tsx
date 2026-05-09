@@ -6,6 +6,7 @@ import Checklist from "@/components/Checklist";
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui";
 import CompleteTopicButton from "@/components/CompleteTopicButton";
+import TopicStatusBadge from "@/components/TopicStatusBadge";
 
 interface StudyPageProps {
   params: { slug: string[] };
@@ -50,7 +51,8 @@ export default function StudyPage({ params }: StudyPageProps) {
     <div className="min-h-screen">
       <Header title={content.title} />
       
-      <main className="container mx-auto p-4 lg:p-8">
+      <main className="app-content">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <div className="lg:col-span-2">
@@ -68,7 +70,7 @@ export default function StudyPage({ params }: StudyPageProps) {
             </div>
 
             {/* Content */}
-            <article className="prose prose-invert max-w-none">
+            <article className="prose prose-invert max-w-none rounded-2xl border border-white/10 bg-card/70 p-5 shadow-xl lg:p-8">
               <MarkdownRenderer content={content.content} />
             </article>
           </div>
@@ -76,12 +78,12 @@ export default function StudyPage({ params }: StudyPageProps) {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Progress Card */}
-            <div className="rounded-lg border bg-card p-6">
+            <div className="rounded-2xl border border-white/10 bg-card/80 p-6 shadow-xl">
               <h3 className="mb-4 text-lg font-semibold">📊 Your Progress</h3>
               <div className="space-y-4">
                 <div>
                   <p className="mb-2 text-sm text-muted-foreground">Status</p>
-                  <Badge variant="outline">{content.status}</Badge>
+                  <TopicStatusBadge slug={slug} fallback={content.status} />
                 </div>
                 <div>
                   <p className="mb-2 text-sm text-muted-foreground">Category</p>
@@ -99,6 +101,7 @@ export default function StudyPage({ params }: StudyPageProps) {
               <QuizWidget slug={slug} questions={quizData.questions} />
             )}
           </div>
+        </div>
         </div>
       </main>
     </div>
