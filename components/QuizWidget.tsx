@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useProgress } from "@/lib/progress";
 import { Button } from "@/components/ui";
 import { CheckCircle2, XCircle, HelpCircle } from "lucide-react";
 
@@ -14,16 +15,16 @@ interface Question {
 interface QuizWidgetProps {
   slug: string;
   questions: Question[];
-  onQuizComplete: (score: number) => void;
+  onQuizComplete?: (score: number) => void;
 }
 
 export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidgetProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const { saveQuizScore } = useProgress();
 
   const handleSelectAnswer = (index: number) => {
     if (answered) return;
@@ -50,7 +51,8 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
       // Quiz completed
       const finalScore = score;
       setQuizCompleted(true);
-      onQuizComplete(finalScore);
+      saveQuizScore(slug, Math.round((finalScore / questions.length) * 100));
+      onQuizComplete?.(finalScore);
     }
   };
 
@@ -60,7 +62,6 @@ export default function QuizWidget({ slug, questions, onQuizComplete }: QuizWidg
     setScore(0);
     setAnswered(false);
     setQuizCompleted(false);
-    setShowResult(false);
   };
 
   if (questions.length === 0) {

@@ -1,0 +1,10 @@
+{
+  "name": "Embedded Study Hub",
+  "short_name": "Study Hub",
+  "description": "Interactive embedded systems study notes for HORIBA preparation",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#ff6b35",
+  "icons": []
+}

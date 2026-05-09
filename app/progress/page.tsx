@@ -45,7 +45,8 @@ export default function ProgressPage() {
     <div className="min-h-screen">
       <Header title="Learning Progress" />
       
-      <main className="container mx-auto p-4 lg:p-8">
+      <main className="app-content">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         {!isLoaded ? (
           <div className="text-center text-muted-foreground">Loading...</div>
         ) : (
@@ -193,6 +194,7 @@ export default function ProgressPage() {
             </section>
           </div>
         )}
+        </div>
       </main>
     </div>
   );

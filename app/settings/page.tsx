@@ -53,7 +53,8 @@ export default function SettingsPage() {
     <div className="min-h-screen">
       <Header title="Settings" />
       
-      <main className="container mx-auto p-4 lg:p-8">
+      <main className="app-content">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl space-y-6">
           {/* Language Settings */}
           <Card>
@@ -176,6 +177,7 @@ export default function SettingsPage() {
               </p>
             </CardContent>
           </Card>
+        </div>
         </div>
       </main>
     </div>
