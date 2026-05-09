@@ -1,16 +1,21 @@
 import { notFound } from "next/navigation";
-import { getContentBySlug } from "@/lib/content";
+import { getContentBySlug, getContentSlugs, getQuizBySlug } from "@/lib/content";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import QuizWidget from "@/components/QuizWidget";
 import Checklist from "@/components/Checklist";
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui";
+import CompleteTopicButton from "@/components/CompleteTopicButton";
 
 interface StudyPageProps {
   params: { slug: string[] };
 }
 
-export default async function StudyPage({ params }: StudyPageProps) {
+export function generateStaticParams() {
+  return getContentSlugs().map((slug) => ({ slug: slug.split("/") }));
+}
+
+export default function StudyPage({ params }: StudyPageProps) {
   const slug = params.slug.join("/");
   const content = getContentBySlug(slug);
 
@@ -18,14 +23,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
     notFound();
   }
 
-  // Try to load quiz data
-  let quizData = null;
-  try {
-    const quizModule = await import(`@/content/${slug}/quiz.json`);
-    quizData = quizModule.default;
-  } catch (e) {
-    // No quiz available for this topic
-  }
+  const quizData = getQuizBySlug(slug);
 
   // Example checklist items (can be customized per topic)
   const checklistItems = [
@@ -89,6 +87,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
                   <p className="mb-2 text-sm text-muted-foreground">Category</p>
                   <p className="font-medium capitalize">{content.category}</p>
                 </div>
+                <CompleteTopicButton slug={slug} />
               </div>
             </div>
 
@@ -97,14 +96,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
 
             {/* Quiz */}
             {quizData && (
-              <QuizWidget
-                slug={slug}
-                questions={quizData.questions}
-                onQuizComplete={(score) => {
-                  console.log("Quiz completed with score:", score);
-                  // Score will be saved via useProgress hook
-                }}
-              />
+              <QuizWidget slug={slug} questions={quizData.questions} />
             )}
           </div>
         </div>
