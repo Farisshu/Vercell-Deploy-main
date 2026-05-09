@@ -125,3 +125,28 @@ export function filterContent({
 
   return filtered;
 }
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correct: number;
+  explanation: string;
+}
+
+export interface QuizFile {
+  questions: QuizQuestion[];
+}
+
+export function getQuizBySlug(slug: string): QuizFile | null {
+  const fullPath = path.join(contentDirectory, `${slug}/quiz.json`);
+
+  if (!fs.existsSync(fullPath)) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(fs.readFileSync(fullPath, "utf8")) as QuizFile;
+  } catch {
+    return null;
+  }
+}

@@ -22,7 +22,7 @@ const defaultProgress: StudyProgress = {
 
 const STORAGE_KEY = "embedded-study-progress";
 
-export function useProgress() {
+export function useProgress(totalTopics = 4) {
   const [progress, setProgress] = useState<StudyProgress>(defaultProgress);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -49,7 +49,7 @@ export function useProgress() {
 
   const markComplete = (slug: string) => {
     const newProgress = { ...progress };
-    newProgress.completedTopics = [...new Set([...newProgress.completedTopics, slug])];
+    newProgress.completedTopics = Array.from(new Set([...newProgress.completedTopics, slug]));
     newProgress.inProgressTopics = newProgress.inProgressTopics.filter((s) => s !== slug);
     newProgress.lastStudied[slug] = new Date().toISOString();
     
@@ -67,6 +67,10 @@ export function useProgress() {
       }
     }
 
+    if (newProgress.completedTopics.length >= totalTopics && !newProgress.badges.includes("Dedicated Learner")) {
+      newProgress.badges = [...newProgress.badges, "Dedicated Learner"];
+    }
+
     saveProgress(newProgress);
   };
 
@@ -74,7 +78,7 @@ export function useProgress() {
     if (!progress.completedTopics.includes(slug)) {
       const newProgress = {
         ...progress,
-        inProgressTopics: [...new Set([...newProgress.inProgressTopics, slug])],
+        inProgressTopics: Array.from(new Set([...progress.inProgressTopics, slug])),
         lastStudied: { ...progress.lastStudied, [slug]: new Date().toISOString() },
       };
       saveProgress(newProgress);
@@ -82,9 +86,14 @@ export function useProgress() {
   };
 
   const saveQuizScore = (slug: string, score: number) => {
+    const badges = score >= 100 && !progress.badges.includes("Quiz Master")
+      ? [...progress.badges, "Quiz Master"]
+      : progress.badges;
     const newProgress = {
       ...progress,
+      badges,
       quizScores: { ...progress.quizScores, [slug]: Math.max(score, progress.quizScores[slug] || 0) },
+      lastStudied: { ...progress.lastStudied, [slug]: new Date().toISOString() },
     };
     saveProgress(newProgress);
   };
@@ -105,7 +114,6 @@ export function useProgress() {
 
   const getOverallProgress = (): number => {
     // This will be calculated dynamically based on total topics
-    const totalTopics = 3; // Will be updated based on actual content
     if (totalTopics === 0) return 0;
     return Math.round((progress.completedTopics.length / totalTopics) * 100);
   };

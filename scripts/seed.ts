@@ -5,54 +5,190 @@ import path from "path";
 
 const contentDir = path.join(process.cwd(), "content");
 
-console.log("🌱 Seeding Embedded Study Hub with sample content...\n");
+type SeedFile = { path: string; body: string };
 
-// Check if content already exists
-const canBusPath = path.join(contentDir, "protocols", "can-bus", "index.md");
-if (fs.existsSync(canBusPath)) {
-  console.log("✅ Sample content already exists!");
-  console.log("\nExisting topics:");
-  
-  function listTopics(dir: string, indent = "") {
-    const files = fs.readdirSync(dir);
-    for (const file of files) {
-      const fullPath = path.join(dir, file);
-      const stat = fs.statSync(fullPath);
-      if (stat.isDirectory()) {
-        console.log(`${indent}📁 ${file}`);
-        listTopics(fullPath, indent + "  ");
-      } else if (file === "index.md") {
-        const content = fs.readFileSync(fullPath, "utf8");
-        const titleMatch = content.match(/title:\s*"([^"]+)"/);
-        const title = titleMatch ? titleMatch[1] : file;
-        console.log(`${indent}📄 ${title}`);
-      }
-    }
-  }
-  
-  listTopics(contentDir);
-  process.exit(0);
+const seedFiles: SeedFile[] = [
+  {
+    path: "protocols/can-bus/index.md",
+    body: `---
+title: "CAN Bus Fundamentals"
+category: "protocols"
+tags: ["can", "mcp2515", "tja1050", "embedded"]
+level: "Beginner"
+estimatedTime: 45
+status: "Not Started"
+---
+
+# CAN Bus Fundamentals 📡
+
+CAN 2.0A uses an 11-bit identifier, non-destructive arbitration, differential CAN_H/CAN_L signaling, CRC checking, ACK, and error confinement.
+
+## Frame structure
+
+| Field | Purpose |
+| --- | --- |
+| SOF | Dominant start bit |
+| Arbitration | 11-bit ID + RTR; lower ID wins |
+| Control | IDE, reserved bit, DLC |
+| Data | 0-8 bytes |
+| CRC/ACK/EOF | Integrity, acknowledgement, end marker |
+
+## MCP2515 + TJA1050 wiring
+
+\`\`\`mermaid
+graph LR
+  MCU[MCU SPI] --> MCP2515[MCP2515 CAN Controller]
+  MCP2515 --> TJA1050[TJA1050 Transceiver]
+  TJA1050 --> CANH[CAN_H]
+  TJA1050 --> CANL[CAN_L]
+  CANH --- TERM[120Ω termination]
+  CANL --- TERM
+\`\`\`
+
+## EFLG quick reference
+
+\`\`\`c
+#define EWARN    0x01
+#define RXWAR    0x02
+#define TXWAR    0x04
+#define RXEP     0x08
+#define TXEP     0x10
+#define RXBOERR  0x20
+#define TXBOERR  0x40
+#define RXBOOVFL 0x80
+\`\`\`
+
+- Use 120Ω termination at both physical ends.
+- Match baud rate and sample point on every node.
+- Check EFLG first when diagnosing bus-off, passive, or overflow issues.
+`,
+  },
+  {
+    path: "protocols/can-bus/quiz.json",
+    body: JSON.stringify(
+      {
+        questions: [
+          { question: "What is the function of the EFLG register in MCP2515?", options: ["Enable frame transmission", "Store error flags and status", "Configure baud rate", "Filter incoming messages"], correct: 1, explanation: "EFLG reports warning, passive, bus-off, and overflow error states." },
+          { question: "What is the standard CAN termination value?", options: ["50Ω", "100Ω", "120Ω", "220Ω"], correct: 2, explanation: "High-speed CAN normally uses 120Ω at each physical end of the bus." },
+          { question: "Which CAN ID wins arbitration?", options: ["Higher ID", "Lower ID", "Longer DLC", "First sender always"], correct: 1, explanation: "Dominant bits override recessive bits, so lower numeric identifiers have higher priority." },
+          { question: "What should you verify first if CAN communication fails?", options: ["LCD contrast", "Termination and baud rate", "Wi-Fi channel", "ADC calibration"], correct: 1, explanation: "Termination, swapped lines, ground reference, and baud timing are common root causes." },
+          { question: "What does bus-off mean?", options: ["Node transmits faster", "Node stopped participating due to excessive errors", "Node became master", "Bus is idle"], correct: 1, explanation: "A bus-off node must recover/reset before it can safely transmit again." }
+        ]
+      },
+      null,
+      2,
+    ),
+  },
+  {
+    path: "rtos/freertos-basics/index.md",
+    body: `---
+title: "FreeRTOS Basics"
+category: "rtos"
+tags: ["freertos", "task", "queue", "semaphore"]
+level: "Beginner"
+estimatedTime: 40
+status: "Not Started"
+---
+
+# FreeRTOS Basics 🧠
+
+A task is a schedulable function with its own stack. Use queues for data transfer and semaphores/mutexes for signaling or protecting shared resources.
+
+## xTaskCreate pattern
+
+\`\`\`c
+BaseType_t ok = xTaskCreate(sensor_task, "sensor", 2048, NULL, 2, NULL);
+if (ok != pdPASS) {
+    /* Log, blink LED, or enter safe state. */
 }
+\`\`\`
 
-// Create directories
-const dirs = [
-  "protocols/can-bus",
-  "protocols/spi",
-  "rtos/freertos-basics",
-  "toolchain",
-  "japanese/technical-terms",
+## Checklist
+
+- [ ] I can create two tasks.
+- [ ] I can sync two tasks via a queue.
+- [ ] I can explain when to use a mutex vs binary semaphore.
+`,
+  },
+  {
+    path: "japanese/technical-terms/index.md",
+    body: `---
+title: "Japanese Technical Terms"
+category: "japanese"
+tags: ["japanese", "technical", "horiba"]
+level: "Beginner"
+estimatedTime: 35
+status: "Not Started"
+---
+
+# Japanese Technical Terms 🇯🇵
+
+| English | Japanese | Romaji | Meaning |
+| --- | --- | --- | --- |
+| Embedded system | 組込みシステム | kumikomi shisutemu | Embedded product/software |
+| Circuit | 回路 | kairo | Electrical circuit |
+| Power supply | 電源 | dengen | Power source |
+| Termination resistor | 終端抵抗 | shūtan teikō | CAN line termination |
+| Specification | 仕様書 | shiyōsho | Requirements/spec document |
+
+Audio pronunciation placeholder: add MP3 files later in \`public/audio\` and link them here.
+`,
+  },
+
+  {
+    path: "rtos/freertos-basics/quiz.json",
+    body: JSON.stringify({
+      questions: [
+        { question: "What is the safest FreeRTOS primitive for sending structured data between two tasks?", options: ["Queue", "Busy-wait global variable", "delay() loop", "printf()"], correct: 0, explanation: "Queues copy data safely between tasks and block/wake tasks without wasting CPU time." },
+        { question: "Which API return value should you check after xTaskCreate?", options: ["pdPASS", "CAN_OK", "HAL_BUSY", "EOF"], correct: 0, explanation: "xTaskCreate returns pdPASS when the task was created successfully." },
+        { question: "What should you use to protect shared mutable data from two tasks?", options: ["Mutex", "Longer task name", "Higher baud rate", "More printf calls"], correct: 0, explanation: "A mutex protects a shared critical section and FreeRTOS mutexes support priority inheritance." },
+        { question: "Which FreeRTOS APIs are intended for ISR context?", options: ["Functions ending with FromISR", "vTaskDelay", "malloc only", "Serial.print only"], correct: 0, explanation: "Use FromISR variants inside interrupts and defer heavier work to tasks." }
+      ]
+    }, null, 2),
+  },
+  {
+    path: "protocols/spi/quiz.json",
+    body: JSON.stringify({
+      questions: [
+        { question: "Which SPI signal is generated by the master to synchronize transfers?", options: ["SCLK", "MISO", "MOSI", "CS"], correct: 0, explanation: "SCLK is the serial clock driven by the SPI master." },
+        { question: "What does CPOL configure in SPI?", options: ["Clock idle polarity", "Chip address", "Payload CRC", "DMA channel"], correct: 0, explanation: "CPOL defines whether the clock idles low or high." },
+        { question: "Why does each SPI peripheral usually need a separate CS line?", options: ["To select exactly one target device", "To increase CPU clock", "To power the board", "To terminate CAN bus"], correct: 0, explanation: "Chip select activates the intended peripheral while others ignore the bus." }
+      ]
+    }, null, 2),
+  },
+  {
+    path: "japanese/technical-terms/quiz.json",
+    body: JSON.stringify({
+      questions: [
+        { question: "What does 回路 (kairo) mean?", options: ["Circuit", "Queue", "Compiler", "Deadline"], correct: 0, explanation: "回路 means circuit, a core term for electronics discussions." },
+        { question: "Which term means specification document?", options: ["仕様書 (shiyōsho)", "電源 (dengen)", "信号 (shingō)", "会議 (kaigi)"], correct: 0, explanation: "仕様書 is a specification or requirements document." },
+        { question: "終端抵抗 (shūtan teikō) is important in which topic?", options: ["CAN termination", "Git branching", "Heap allocation", "Standup meeting"], correct: 0, explanation: "終端抵抗 means termination resistor, commonly discussed for CAN wiring." },
+        { question: "How do you read 電源?", options: ["dengen", "kairo", "shingō", "shiken"], correct: 0, explanation: "電源 is read dengen and means power supply/source." }
+      ]
+    }, null, 2),
+  },
 ];
 
-for (const dir of dirs) {
-  const fullPath = path.join(contentDir, dir);
-  if (!fs.existsSync(fullPath)) {
-    fs.mkdirSync(fullPath, { recursive: true });
-    console.log(`✅ Created directory: ${dir}`);
+console.log("🌱 Seeding Embedded Study Hub sample content...\n");
+fs.mkdirSync(contentDir, { recursive: true });
+
+let created = 0;
+let skipped = 0;
+
+for (const file of seedFiles) {
+  const target = path.join(contentDir, file.path);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+
+  if (fs.existsSync(target)) {
+    skipped += 1;
+    console.log(`↪️  Skipped existing ${file.path}`);
+    continue;
   }
+
+  fs.writeFileSync(target, file.body.trimStart() + "\n");
+  created += 1;
+  console.log(`✅ Created ${file.path}`);
 }
 
-console.log("\n✅ Seed complete! Run 'npm run dev' to start the development server.");
-console.log("\n📚 Next steps:");
-console.log("   1. npm install");
-console.log("   2. npm run dev");
-console.log("   3. Open http://localhost:3000");
+console.log(`\nDone. Created ${created} file(s), skipped ${skipped} existing file(s).`);
+console.log("Run npm run dev and open http://localhost:3000.");

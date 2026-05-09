@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "question": "What does 回路 (kairo) mean?",
+      "options": ["Circuit", "Queue", "Compiler", "Deadline"],
+      "correct": 0,
+      "explanation": "回路 means circuit, a core term for electronics discussions."
+    },
+    {
+      "question": "Which term means specification document?",
+      "options": ["仕様書 (shiyōsho)", "電源 (dengen)", "信号 (shingō)", "会議 (kaigi)"],
+      "correct": 0,
+      "explanation": "仕様書 is a specification or requirements document."
+    },
+    {
+      "question": "終端抵抗 (shūtan teikō) is important in which topic?",
+      "options": ["CAN termination", "Git branching", "Heap allocation", "Standup meeting"],
+      "correct": 0,
+      "explanation": "終端抵抗 means termination resistor, commonly discussed for CAN wiring."
+    },
+    {
+      "question": "How do you read 電源?",
+      "options": ["dengen", "kairo", "shingō", "shiken"],
+      "correct": 0,
+      "explanation": "電源 is read dengen and means power supply/source."
+    }
+  ]
+}
